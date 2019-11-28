@@ -1,0 +1,2 @@
+D:\zhouyou\unity\HappySquirrel\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+D:\zhouyou\unity\HappySquirrel\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
