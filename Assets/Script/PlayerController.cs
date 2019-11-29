@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rigidbody2D;
     Animator animator;
     float moveForce = 8f;
+    float jumpForce = 6.5f;
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour
             rigidbody2D.velocity = new Vector2(moveForce, rigidbody2D.velocity.y);
         }
         else {
-            rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+            //rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
             playIdle();
         } 
     }
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
         if (standOnSomething()) {
             if (Input.GetButtonDown("Vertical"))
             {
-                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, moveForce);
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
                 playJump();
             }
         }
