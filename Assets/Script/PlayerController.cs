@@ -62,11 +62,11 @@ public class PlayerController : MonoBehaviour
             if (Input.GetButtonDown("Vertical"))
             {
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
-                playJump();
+                //playJump();
             }
         }
             
-        if (rigidbody2D.velocity.y > 0&& animator.GetInteger("state")==2)
+        if (rigidbody2D.velocity.y > 0)
             playJump();
     }
 
