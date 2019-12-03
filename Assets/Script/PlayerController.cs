@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     float moveForce = 8f;
     float jumpForce = 6.5f;
+    bool isJumpping = false;
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -33,7 +34,7 @@ public class PlayerController : MonoBehaviour
             rigidbody2D.velocity = new Vector2(moveForce, rigidbody2D.velocity.y);
         }
         else {
-            //rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+            rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
             playIdle();
         } 
     }
@@ -59,14 +60,15 @@ public class PlayerController : MonoBehaviour
     //控制跳跃
     void jump() {
         if (standOnSomething()) {
+            isJumpping = false;
             if (Input.GetButtonDown("Vertical"))
             {
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
-                //playJump();
+                isJumpping = true;
             }
         }
             
-        if (rigidbody2D.velocity.y > 0)
+        if (rigidbody2D.velocity.y > 0&& isJumpping)
             playJump();
     }
 
