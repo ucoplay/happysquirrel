@@ -7,17 +7,20 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rigidbody2D;
     Animator animator;
     float moveForce = 8f;
-    float jumpForce = 6.5f;
+    public float jumpForce = 6.5f;
     bool isJumpping = false;
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
-    void FixedUpdate()
+    void Update()
     {
-        move();
+        playIdle();
         jump();
+        move();
+        crouch();
+        //playCrouch();
     }
 
     //移动
@@ -35,8 +38,7 @@ public class PlayerController : MonoBehaviour
         }
         else {
             rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
-            playIdle();
-        } 
+        }
     }
     //播放向左奔跑的动画
     void playRunLeft() {
@@ -57,23 +59,41 @@ public class PlayerController : MonoBehaviour
     void playJump() {
         animator.SetInteger("state", 2);
     }
+    void playCrouch() {
+        animator.SetInteger("state",3);
+        Debug.Log(animator.GetInteger("state"));
+    }
     //控制跳跃
     void jump() {
         if (standOnSomething()) {
             isJumpping = false;
-            if (Input.GetButtonDown("Vertical"))
+            if (Input.GetAxis("Vertical")>0)
             {
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
                 isJumpping = true;
             }
         }
-            
-        if (rigidbody2D.velocity.y > 0&& isJumpping)
+
+        if (rigidbody2D.velocity.y > 0 && isJumpping)
+        {
             playJump();
+        }
+           
     }
 
     bool standOnSomething() {
-        Debug.Log(rigidbody2D.IsTouchingLayers());
         return rigidbody2D.IsTouchingLayers();
+    }
+
+    void crouch() {     
+        if (standOnSomething())
+        {
+            if (Input.GetAxis("Vertical") < 0)
+            {
+                playCrouch();
+            } else if (Input.GetButtonUp("up")) {
+                playIdle();
+            }
+        }
     }
 }
