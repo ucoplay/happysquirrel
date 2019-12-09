@@ -17,16 +17,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         playIdle();
+        Debug.Log("state:" + animator.GetInteger("state"));
         jump();
         move();
         crouch();
-        //playCrouch();
+    }
+
+    private void FixedUpdate()
+    {
     }
 
     //移动
     void move() {
         float keyInput = Input.GetAxis("Horizontal");
-        if (keyInput < 0)
+        if (keyInput < 0 )
         {
             playRunLeft();
             rigidbody2D.velocity = new Vector2(-moveForce, rigidbody2D.velocity.y);
@@ -40,29 +44,6 @@ public class PlayerController : MonoBehaviour
             rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
         }
     }
-    //播放向左奔跑的动画
-    void playRunLeft() {
-        animator.SetInteger("state",1);
-        transform.localScale = new Vector3(-1,1,1);
-    }
-    //播放向右奔跑的动画
-    void playRunRight()
-    {
-        animator.SetInteger("state", 1);
-        transform.localScale = new Vector3(1, 1, 1);
-    }
-    //播放放空的动画
-    void playIdle() {
-        animator.SetInteger("state", 0);
-    }
-    //播放跳跃的动画
-    void playJump() {
-        animator.SetInteger("state", 2);
-    }
-    void playCrouch() {
-        animator.SetInteger("state",3);
-        Debug.Log(animator.GetInteger("state"));
-    }
     //控制跳跃
     void jump() {
         if (standOnSomething()) {
@@ -74,9 +55,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (rigidbody2D.velocity.y > 0 && isJumpping)
+        if (isJumpping)
         {
-            playJump();
+            if (rigidbody2D.velocity.y > 0)
+            {
+                playJump();
+            }
+            else //if (rigidbody2D.velocity.y < 0)
+            {
+                playFalling();
+            }
         }
            
     }
@@ -85,15 +73,52 @@ public class PlayerController : MonoBehaviour
         return rigidbody2D.IsTouchingLayers();
     }
 
-    void crouch() {     
+    void crouch()
+    {
         if (standOnSomething())
         {
             if (Input.GetAxis("Vertical") < 0)
             {
                 playCrouch();
-            } else if (Input.GetButtonUp("up")) {
-                playIdle();
             }
         }
+    }
+    //播放向左奔跑的动画
+    void playRunLeft()
+    {
+        if (standOnSomething())
+        {
+            animator.SetInteger("state", 1);
+        }
+        transform.localScale = new Vector3(-1, 1, 1);
+    }
+    //播放向右奔跑的动画
+    void playRunRight()
+    {
+        if (standOnSomething())
+        {
+            animator.SetInteger("state", 1);
+        }
+        transform.localScale = new Vector3(1, 1, 1);
+    }
+    //播放放空的动画
+    void playIdle()
+    {
+        animator.SetInteger("state", 0);
+    }
+    //播放跳跃的动画
+    void playJump()
+    {
+        animator.SetInteger("state", 2);
+    }
+    //播放跳跃的动画
+    void playFalling()
+    {
+        animator.SetInteger("state", 4);
+    }
+    void playCrouch()
+    {
+        animator.SetInteger("state", 3);
+
     }
 }
