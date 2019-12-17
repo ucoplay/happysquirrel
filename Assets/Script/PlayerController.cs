@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rigidbody2D;
     Animator animator;
+    public Collider2D collider2D;
     float moveForce = 8f;
     public float jumpForce = 6.5f;
     bool isJumpping = false;
@@ -16,15 +17,14 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        playIdle();
-        Debug.Log("state:" + animator.GetInteger("state"));
-        jump();
-        move();
-        crouch();
     }
 
     private void FixedUpdate()
     {
+        playIdle();
+        jump();
+        move();
+        crouch();
     }
 
     //移动
@@ -70,7 +70,12 @@ public class PlayerController : MonoBehaviour
     }
 
     bool standOnSomething() {
-        return rigidbody2D.IsTouchingLayers();
+        Debug.Log("collider touch:"+collider2D.IsTouchingLayers(LayerMask.NameToLayer("tile_map")));
+        Debug.Log("rigidbody touch:"+rigidbody2D.IsTouchingLayers(LayerMask.NameToLayer("tile_map")));
+        Debug.Log("Physics2D touch:" + Physics2D.IsTouchingLayers(collider2D, LayerMask.NameToLayer("tile_map")));
+        //Debug.Log("rigidbody.velocity:" + rigidbody2D.velocity.y);
+        //Debug.Log(rigidbody2D.IsTouchingLayers());
+        return rigidbody2D.IsTouchingLayers(LayerMask.NameToLayer("tile_map"));
     }
 
     void crouch()
